@@ -166,9 +166,17 @@ NSUInteger const MTIRenderPipelineMaximumColorAttachmentCount = 8;
     for (NSUInteger index = 0; index < self.colorAttachmentCount; index += 1) {
         MTLRenderPipelineColorAttachmentDescriptor *colorAttachmentDescriptor = [[MTLRenderPipelineColorAttachmentDescriptor alloc] init];
         colorAttachmentDescriptor.pixelFormat = configuration.colorAttachmentPixelFormats[index];
-        colorAttachmentDescriptor.blendingEnabled = NO;
+        colorAttachmentDescriptor.blendingEnabled = YES;
+        colorAttachmentDescriptor.rgbBlendOperation           = MTLBlendOperationAdd;
+        colorAttachmentDescriptor.alphaBlendOperation         = MTLBlendOperationAdd;
+        colorAttachmentDescriptor.sourceRGBBlendFactor        = MTLBlendFactorSourceAlpha;
+        colorAttachmentDescriptor.sourceAlphaBlendFactor      = MTLBlendFactorSourceAlpha;
+        colorAttachmentDescriptor.destinationRGBBlendFactor   = MTLBlendFactorOneMinusSourceAlpha;
+        colorAttachmentDescriptor.destinationAlphaBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
+        
         renderPipelineDescriptor.colorAttachments[index] = colorAttachmentDescriptor;
     }
+    
     renderPipelineDescriptor.depthAttachmentPixelFormat = configuration.depthAttachmentPixelFormat;
     renderPipelineDescriptor.stencilAttachmentPixelFormat = configuration.stencilAttachmentPixelFormat;
     
